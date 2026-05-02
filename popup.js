@@ -37,5 +37,5 @@ testBtn.addEventListener('click', () => {
   const text = testText.value;
   const rate = parseFloat(rateInput.value);
   // 백그라운드와 동일한 엔진으로 테스트 실행
-  chrome.tts.speak(text, { lang: 'ko-KR', rate: rate, enqueue: false });
+  chrome.tts.speak(text, { lang: 'ko-KR', rate: rate, enqueue: true });
 });

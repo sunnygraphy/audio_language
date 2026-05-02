@@ -17,7 +17,7 @@ function processSpeak(text) {
     chrome.tts.speak(text, {
       lang: 'ko-KR',
       rate: rate,
-      enqueue: false,
+      enqueue: true,
       onEvent: (event) => {
         if (event.type === 'error') {
           console.error("[SubtitleReader] TTS 에러:", event.errorMessage);
