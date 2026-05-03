@@ -6,7 +6,7 @@ const observer = new MutationObserver((mutations, obs) => {
                        document.querySelector('.watch-video--timed-text-container');
   
   if (subtitleNode) {
-    const currentText = subtitleNode.textContent.trim().replace(/\s+/g, ' ');
+    const currentText = subtitleNode.textContent.replace(/-/g, '').trim().replace(/\s+/g, ' ');
     
     if (currentText && currentText !== lastText && currentText.length > 0) {
       lastText = currentText;
