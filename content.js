@@ -6,7 +6,11 @@ const observer = new MutationObserver((mutations, obs) => {
                        document.querySelector('.watch-video--timed-text-container');
   
   if (subtitleNode) {
-    const currentText = subtitleNode.textContent.replace(/-/g, '').trim().replace(/\s+/g, ' ');
+    // dash(-)를 쉼표(,)로 치환하여 TTS가 자연스러운 휴지기(약 200ms)를 갖도록 함
+    const currentText = subtitleNode.textContent
+      .replace(/-/g, ', ')
+      .trim()
+      .replace(/\s+/g, ' ');
     
     if (currentText && currentText !== lastText && currentText.length > 0) {
       lastText = currentText;
