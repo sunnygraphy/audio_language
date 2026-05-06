@@ -7,13 +7,13 @@ const observer = new MutationObserver((mutations, obs) => {
   
   if (subtitleNode) {
     // innerText는 <br>이나 블록 엘리먼트에 의한 줄바꿈을 \n으로 인식합니다.
-    // 줄바꿈(\n)과 dash(-)를 찾아 쉼표로 바꾸고, 중복 쉼표와 공백을 정리합니다.
+    // 1. 줄바꿈으로 분리 2. 앞뒤 공백 및 대화 구분용 대시(-) 제거 3. 공백으로 합침
     const currentText = (subtitleNode.innerText || subtitleNode.textContent)
-      .replace(/[\n-]/g, ', ')     // 줄바꿈과 대시를 쉼표로 변환
-      .split(',')                  // 쉼표 기준으로 분리
-      .map(t => t.trim())          // 각 문구 앞뒤 공백 제거
-      .filter(t => t.length > 0)   // 빈 문구 제거
-      .join(', ');                 // 다시 쉼표와 공백으로 연결
+      .split('\n')
+      .map(line => line.trim().replace(/^[-\s]+/, ''))
+      .filter(line => line.length > 0)
+      .join(' ')
+      .trim();
     
     if (currentText && currentText !== lastText && currentText.length > 0) {
       lastText = currentText;
