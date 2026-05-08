@@ -14,9 +14,6 @@ function processSpeak(text) {
     const rate = parseFloat(data.voiceRate) || 1.0;
     console.log("[SubtitleReader] TTS 재생 시작 - 속도:", rate);
 
-    // 새로운 자막이 들어오면 이전 음성은 즉시 중단
-    chrome.tts.stop();
-
     chrome.tts.speak(text, {
       lang: 'ko-KR',
       rate: rate,
