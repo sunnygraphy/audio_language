@@ -36,6 +36,17 @@ chrome.runtime.onMessage.addListener((request) => {
 testBtn.addEventListener('click', () => {
   const text = testText.value;
   const rate = parseFloat(rateInput.value);
-  // 백그라운드와 동일한 엔진으로 테스트 실행
-  chrome.tts.speak(text, { lang: 'ko-KR', rate: rate, enqueue: true });
+  // TTS rate는 0.1에서 10.0 사이여야 합니다.
+  const clampedRate = Math.max(0.1, Math.min(10.0, rate));
+  
+  // Google 한국어 음성을 명시적으로 검색하여 테스트 재생
+  chrome.tts.getVoices((voices) => {
+    const googleVoice = voices.find(v => v.lang === 'ko-KR' && v.voiceName.includes('Google'));
+    chrome.tts.speak(text, { 
+      voiceName: googleVoice ? googleVoice.voiceName : null,
+      lang: 'ko-KR', 
+      rate: clampedRate, 
+      enqueue: true 
+    });
+  });
 });

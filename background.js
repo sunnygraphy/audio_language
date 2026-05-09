@@ -12,18 +12,27 @@ function processSpeak(text) {
     if (!isEnabled) return;
 
     const rate = parseFloat(data.voiceRate) || 1.0;
+    // TTS rate는 0.1에서 10.0 사이여야 합니다.
+    const clampedRate = Math.max(0.1, Math.min(10.0, rate));
+
     console.log("[SubtitleReader] TTS 재생 시작 - 속도:", rate);
 
-    chrome.tts.speak(text, {
-      lang: 'ko-KR',
-      rate: rate,
-      pitch: 1.1, // 음높이를 약간 높이면 의문문 처리가 더 자연스러워집니다.
-      enqueue: true,
-      onEvent: (event) => {
-        if (event.type === 'error') {
-          console.error("[SubtitleReader] TTS 에러:", event.errorMessage);
+    // Google 한국어 음성을 명시적으로 검색하여 재생
+    chrome.tts.getVoices((voices) => {
+      const googleVoice = voices.find(v => v.lang === 'ko-KR' && v.voiceName.includes('Google'));
+      
+      chrome.tts.speak(text, {
+        voiceName: googleVoice ? googleVoice.voiceName : null,
+        lang: 'ko-KR',
+        rate: clampedRate,
+        pitch: 1.1, // 기존 설정 유지
+        enqueue: true,
+        onEvent: (event) => {
+          if (event.type === 'error') {
+            console.error("[SubtitleReader] TTS 에러:", event.errorMessage);
+          }
         }
-      }
+      });
     });
   });
 }
